@@ -1,8 +1,10 @@
 var BREWERY_API_KEY = 'dbf47ab77756b4c1ea6042966226dcfe';
+var GOOGLE_API_KEY = 'AIzaSyDkXhOx9aHkfBE2HIP9JMUo3LHhMSE-Vlg';
 var SPOT_INFO = [];
 var COUNTY_NAMES = ['-select county-'];
 var SPOT_NAMES = ['-select spot-']; 
 var SELECTED_SPOT = {};
+var SPOT_ZIP = ['before'];
 
 //gets the county names from the SpitCast API and stores it into the COUNTY_NAMES array
 //this list is used to generate the dropdown list in the main menu
@@ -72,14 +74,26 @@ $('.js-spot').change(function() {
 	});
 });
 
+var getZIP = function() {
+	var spot_latlng = SELECTED_SPOT.latitude + ',' + SELECTED_SPOT.longitude;
+	$.getJSON('https://maps.googleapis.com/maps/api/geocode/json?latlng='
+		+ spot_latlng +
+		'&key=' + GOOGLE_API_KEY + '&result_type=postal_code',
+		function(data) {
+			 data.results[0].address_components[0].long_name
+		}
+	);
+};
+
+//creates a map using Google Map API
 var initMap = function() {
-  var uluru = {lat: SELECTED_SPOT.latitude, lng: SELECTED_SPOT.longitude};
+  var spot_location = {lat: SELECTED_SPOT.latitude, lng: SELECTED_SPOT.longitude};
   var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 8,
-    center: uluru
+    zoom: 15,
+    center: spot_location
   });
   var marker = new google.maps.Marker({
-    position: uluru,
+    position: spot_location,
     map: map
   });
 }
@@ -90,9 +104,8 @@ var initMap = function() {
 $('.js-go').on('click', function(event) {
 	event.preventDefault();
 	$('#map').removeClass('hidden');
-	console.log(SELECTED_SPOT.latitude);
-	console.log(SELECTED_SPOT.longitude);
 	initMap();
+	getZIP();
 });
 
 
