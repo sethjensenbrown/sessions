@@ -1,12 +1,13 @@
-var BREWERY_API_KEY = 'dbf47ab77756b4c1ea6042966226dcfe';
+var BREWERY_API_KEY = '664571fd14f1923c92e1d65ebcc73561';
 var GOOGLE_API_KEY = 'AIzaSyDkXhOx9aHkfBE2HIP9JMUo3LHhMSE-Vlg';
 var SPOT_INFO = [];
 var COUNTY_NAMES = ['-select county-'];
 var SPOT_NAMES = ['-select spot-']; 
 var SELECTED_SPOT = {};
-var SPOT_ZIP = ['before'];
+var BREWERY_INFO = [];
 
-//gets the county names from the SpitCast API and stores it into the COUNTY_NAMES array
+// gets the spot info from the SpitCast API and stores it into the SPOT_INFO array
+// also gets the county names from SPOT_INFO and stores them into the COUNTY_NAMES array
 //this list is used to generate the dropdown list in the main menu
 $.getJSON("http://api.spitcast.com/api/spot/all", function(data) {
 	//copies spot data from SpitCast API into SPOT_INFO array
@@ -25,6 +26,18 @@ $.getJSON("http://api.spitcast.com/api/spot/all", function(data) {
 	//once list is generated, the options are added to the dropdown menu
 	$('.js-county').html(renderList(COUNTY_NAMES));
 });
+
+//returns a string of html for the options of a dropdown menu
+//based on the given array
+var renderList = function(list) {
+	var listHTML = []; 
+	var joinedList = '';
+	listHTML = list.map(function(item) {
+		return '<option value="' + item +'">' + item + '</option>';
+	});
+	joinedList = listHTML.join('');
+	return joinedList;
+};
 
 //event listener for the county dropdown menu
 $('.js-county').change(function() {
@@ -50,16 +63,6 @@ var getSpotNames = function(countyName) {
 	$('.js-spot').removeClass('hidden');	
 };
 
-//returns a string of options for a dropdown menu from the given list
-var renderList = function(list) {
-	var listHTML = []; 
-	var joinedList = '';
-	listHTML = list.map(function(item) {
-		return '<option value="' + item +'">' + item + '</option>';
-	});
-	joinedList = listHTML.join('');
-	return joinedList;
-};
 
 //event listener for spot selection
 //stores the info from the selected spot in SELECTED_SPOT object
@@ -74,16 +77,51 @@ $('.js-spot').change(function() {
 	});
 });
 
-var getZIP = function() {
-	var spot_latlng = SELECTED_SPOT.latitude + ',' + SELECTED_SPOT.longitude;
-	$.getJSON('https://maps.googleapis.com/maps/api/geocode/json?latlng='
-		+ spot_latlng +
-		'&key=' + GOOGLE_API_KEY + '&result_type=postal_code',
+//event listener for submit button
+//uses geoData to find nearby breweries with BreweryDB
+$('.js-go').on('click', function(event) {
+	event.preventDefault();
+	$('#map').removeClass('hidden');
+	findBreweries();
+	console.log(BREWERY_INFO);
+	initMap();
+});
+
+/*var findBreweries = function() {
+	fetch('http://api.brewerydb.com/v2/search/geo/point?lat=' +
+		SELECTED_SPOT.latitude + '&lng=' + SELECTED_SPOT.longitude + 
+		'&key=' + BREWERY_API_KEY, {
+  		mode: 'no-cors'
+		}).then(function(response) { 
+		// Convert to JSON
+		return response.json();
+		}).then(function(j) {
+		// Yay, `j` is a JavaScript object
+		console.log(j); 
+		});
+};*/
+
+//gets brewery information by location from the brewerydDB website using
+//the latitude and longitude of the selected spot
+var findBreweries = function() {
+	//resets BREWERY_INFO in case user changes their mind
+	BREWERY_INFO = [];
+	//had to use cors-anywhere proxy to get around CORS restriction
+	$.getJSON('https://cors-anywhere.herokuapp.com' + 
+		'/http://api.brewerydb.com/v2/search/geo/point?lat=' +
+		SELECTED_SPOT.latitude + '&lng=' + SELECTED_SPOT.longitude + 
+		'&key=' + BREWERY_API_KEY,
+		//stores the data in BREWERY_INFO
 		function(data) {
-			 data.results[0].address_components[0].long_name
+			BREWERY_INFO = data.data.map(function(item) {
+				return item;
+			});
+			console.log(BREWERY_INFO);
 		}
 	);
 };
+
+
 
 //creates a map using Google Map API
 var initMap = function() {
@@ -97,16 +135,5 @@ var initMap = function() {
     map: map
   });
 }
-
-//event listener for submit button
-//gets geoData for given lad and long
-//uses geoData to find nearby breweries with BreweryDB
-$('.js-go').on('click', function(event) {
-	event.preventDefault();
-	$('#map').removeClass('hidden');
-	initMap();
-	getZIP();
-});
-
 
 
