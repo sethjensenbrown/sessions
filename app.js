@@ -3,13 +3,13 @@ var GOOGLE_API_KEY = 'AIzaSyDkXhOx9aHkfBE2HIP9JMUo3LHhMSE-Vlg';
 var SPOT_INFO = [];
 var COUNTY_NAMES = ['-select county-'];
 var SPOT_NAMES = ['-select spot-']; 
-var SELECTED_SPOT = {};
+var SELECTED_SPOT = {latitude: 0, longitude:0};
 var BREWERY_INFO = [];
 
 // gets the spot info from the SpitCast API and stores it into the SPOT_INFO array
 // also gets the county names from SPOT_INFO and stores them into the COUNTY_NAMES array
 //this list is used to generate the dropdown list in the main menu
-$.getJSON("http://api.spitcast.com/api/spot/all", function(data) {
+$.getJSON('http://api.spitcast.com/api/spot/all', function(data) {
 	//copies spot data from SpitCast API into SPOT_INFO array
 	data.forEach(function(item) {
 		SPOT_INFO.push(item);
@@ -82,24 +82,33 @@ $('.js-spot').change(function() {
 $('.js-go').on('click', function(event) {
 	event.preventDefault();
 	$('#map').removeClass('hidden');
-	findBreweries();
-	console.log(BREWERY_INFO);
-	initMap();
+	//findBreweries();
+	findForecast();
 });
 
-/*var findBreweries = function() {
-	fetch('http://api.brewerydb.com/v2/search/geo/point?lat=' +
-		SELECTED_SPOT.latitude + '&lng=' + SELECTED_SPOT.longitude + 
-		'&key=' + BREWERY_API_KEY, {
-  		mode: 'no-cors'
-		}).then(function(response) { 
-		// Convert to JSON
-		return response.json();
-		}).then(function(j) {
-		// Yay, `j` is a JavaScript object
-		console.log(j); 
+
+//gets surf forecast from Spitcast API
+var findForecast = function() {
+	$.getJSON('http://api.spitcast.com/api/spot/forecast/' + SELECTED_SPOT.spot_id +'/', 
+		function(data) {
+			//stores desired info in forecast array
+			var forecast = data.map(function(item) {
+				return {
+					hour: item.hour,
+					shape: item.shape_full,
+					size: item.size
+				};
+			});
+			//uses forecast info to create desired HTML elements
+			var forecastHTML = forecast.map(function(item) {
+				return '<div class="forecast">' +
+				'<p>' + item.hour + ': ' + item.size + 'ft ' + item.shape + '</p>'
+				+ '</div>';
+			});
+			//puts HTML into DOM
+			$('#forecast_container').html(forecastHTML.join(''));
 		});
-};*/
+}
 
 //gets brewery information by location from the brewerydDB website using
 //the latitude and longitude of the selected spot
@@ -110,30 +119,93 @@ var findBreweries = function() {
 	$.getJSON('https://cors-anywhere.herokuapp.com' + 
 		'/http://api.brewerydb.com/v2/search/geo/point?lat=' +
 		SELECTED_SPOT.latitude + '&lng=' + SELECTED_SPOT.longitude + 
-		'&key=' + BREWERY_API_KEY,
-		//stores the data in BREWERY_INFO
+		'&radius=2' +
+		'&key=' + BREWERY_API_KEY, 
 		function(data) {
+			//stores the data in BREWERY_INFO
 			BREWERY_INFO = data.data.map(function(item) {
 				return item;
 			});
-			console.log(BREWERY_INFO);
+			//calls function that creates map
+			$('#map_canvas').removeClass('hidden');
+			initMap();
 		}
 	);
 };
 
-
-
 //creates a map using Google Map API
-var initMap = function() {
-  var spot_location = {lat: SELECTED_SPOT.latitude, lng: SELECTED_SPOT.longitude};
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 15,
-    center: spot_location
-  });
-  var marker = new google.maps.Marker({
-    position: spot_location,
-    map: map
-  });
-}
+function initMap() {
+	var map;
+    var bounds = new google.maps.LatLngBounds();
+    var mapOptions = {
+        mapTypeId: 'roadmap'
+    };
+                    
+    //displays a map on the page
+    map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+    map.setTilt(45);
 
+    //creates a marker for the surf spot using wave icon
+    var image = {
+    		url: 'https://static.wixstatic.com/media/2564b3_81d36f8158f742fb9b929f66d7ec2914~mv2.png_256',
+			scaledSize: new google.maps.Size(30, 30)	
+		};
+    var position = new google.maps.LatLng(SELECTED_SPOT.latitude, SELECTED_SPOT.longitude);
+        bounds.extend(position);
+  	var beachMarker = new google.maps.Marker({
+    	position: position,
+    	map: map,
+    	icon: image
+  	});
+        
+    //creates an array to hold params for map markers
+    var markers = BREWERY_INFO.map(function(item) {
+    	return [item.brewery.name, item.latitude, item.longitude];
+    })
+                        
+    //creates html for info windows for map markers
+    var infoWindowContent = BREWERY_INFO.map(function(item) {
+    	return ['<div class="info_content">' +
+        '<h3>' + (item.brewery.name || '') + '</h3>' +
+        '<p>' + (item.streetAddress || '') + '</p>' +
+        '<p>' + (item.locality || '') + ', ' + (item.region || '') + ' ' + (item.postalCode || '') + '</p>' +
+        '<p>' + (item.phone || '') + '</p>' +
+        '<p><a href="' + (item.website || 'http://www.brewerydb.com/brewery/' + item.brewery.id) + 
+        '">' + (item.website || 'http://www.brewerydb.com/brewery/' + item.brewery.id) + '</a></p>' +
+        '<p>' + (item.hoursOfOperation || '') + '</p>' +
+    	'</div>']
+    });
+        
+    //displays multiple markers on the map
+    var infoWindow = new google.maps.InfoWindow(), marker, i;
+    
+    //loops through the array of markers & places each one on the map  
+    for( i = 0; i < markers.length; i++ ) {
+        var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+        bounds.extend(position);
+        marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: markers[i][0]
+        });
+        
+        //allows each marker to have an info window    
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                infoWindow.setContent(infoWindowContent[i][0]);
+                infoWindow.open(map, marker);
+            }
+        })(marker, i));
 
+        //automatically centers the map fitting all markers on the screen
+        map.fitBounds(bounds);
+    }
+
+    //adds brewery info as a list below the map
+    $('#results_container').html(infoWindowContent.join(''));
+};
+
+//NEXT TASKS: 
+//create backup if no breweries found, possibly change radius?
+//create backup if no forecast found
+//design!
