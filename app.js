@@ -82,8 +82,8 @@ $('.js-spot').change(function() {
 $('.js-go').on('click', function(event) {
 	event.preventDefault();
 	$('#map').removeClass('hidden');
-	//findBreweries();
 	findForecast();
+	findBreweries();
 });
 
 
@@ -146,17 +146,23 @@ function initMap() {
     map.setTilt(45);
 
     //creates a marker for the surf spot using wave icon
-    var image = {
+    var surfIcon = {
     		url: 'https://static.wixstatic.com/media/2564b3_81d36f8158f742fb9b929f66d7ec2914~mv2.png_256',
 			scaledSize: new google.maps.Size(30, 30)	
 		};
-    var position = new google.maps.LatLng(SELECTED_SPOT.latitude, SELECTED_SPOT.longitude);
-        bounds.extend(position);
+    var spotPosition = new google.maps.LatLng(SELECTED_SPOT.latitude, SELECTED_SPOT.longitude);
+        bounds.extend(spotPosition);
   	var beachMarker = new google.maps.Marker({
-    	position: position,
+    	position: spotPosition,
     	map: map,
-    	icon: image
+    	icon: surfIcon
   	});
+  	var spotInfoWindow = new google.maps.InfoWindow({
+  		content: '<p>' + SELECTED_SPOT.spot_name + '<p>'
+  	});
+  	beachMarker.addListener('click', function() {
+    	spotInfoWindow.open(map, beachMarker);
+    });
         
     //creates an array to hold params for map markers
     var markers = BREWERY_INFO.map(function(item) {
@@ -186,7 +192,11 @@ function initMap() {
         marker = new google.maps.Marker({
             position: position,
             map: map,
-            title: markers[i][0]
+            title: markers[i][0],
+            icon: {
+    			url: 'http://www.free-icons-download.net/images/beer-icons-46158.png',
+				scaledSize: new google.maps.Size(30, 30)	
+			}
         });
         
         //allows each marker to have an info window    

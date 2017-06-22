@@ -4,48 +4,61 @@
 	<head>
 		<title> Sessions | Surf + Beer</title>
 		<meta charset="utf-8">
-		<meta name="description" content="Find breweries near your surf spot">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Find breweries near your surf spot">
 		<!--link to CSS stylesheet-->
 		<link rel="stylesheet" href="main.css" type="text/css">
 		<!--link to Google Font-->
 		<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto:300,400" rel="stylesheet">
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- Bootstrap theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 	</head>
 
 	<body>
-		<!--background wave image-->
-		<!--<img src="" id="background">-->
-
-		<!--title and tagline-->
-		<header>
-			<h1>Sessions</h1>
-			<h2>surf + beer</h2>
-		</header>
-
-		<!--searchbar for main title screen-->
-		<form>
-			<select name="county" class="js-county">
-				
-			</select>
-			<select name="spot" class="hidden js-spot">
-				
-			</select>
-			<button type="submit" class="hidden js-go">go.</button>
-		</form>
-
-		<!--Forecast container-->
-		<div id="forecast_container">
-
+		<div class="container">
+			<!--title and tagline-->
+			<div class="page-header">
+				<h1>Sessions       <small>surf + beer.</small></h1>
+			</div>
 		</div>
-		
-		<!--Google Map container-->
-		<div id="map_wrapper">
-    		<div id="map_canvas" class="mapping hidden"></div>
+
+		<div class="container">
+			<div class="row">
+				<!--searchbar for main title screen-->
+				<form>
+					<select name="county" class="js-county">
+						
+					</select>
+					<select name="spot" class="hidden js-spot">
+						
+					</select>
+					<button type="submit" class="hidden js-go">go.</button>
+				</form>
+			</div>
 		</div>
+
+		<div class="container">
+		<div class="row">
+			<!--Forecast container-->
+			<div class="col-md-2">
+				<h3>first surf.</h3>
+				<div id="forecast_container"></div>
+			</div>
 		
-		<!--Results container-->
-		<div id="results_container">
+			<div class="col-md-10">
+				<h3>then beer.</h3>
+				<!--Google Map container-->
+				<div id="map_wrapper">
+		    		<div id="map_canvas" class="mapping hidden"></div>
+				</div>
 			
+				<!--Results container-->
+				<div id="results_container"></div>
+			</div>
+		</div>
 		</div>
 
 		<!--links in script for jQuery-->
@@ -54,5 +67,8 @@
 		<script src="app.js"></script>
 		<!--links in Google Maps API-->
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkXhOx9aHkfBE2HIP9JMUo3LHhMSE-Vlg&callback=initMap"></script>
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 	</body>
 </html>
