@@ -1,0 +1,19 @@
+* {
+	box-sizing: border-box;
+}
+
+.hidden {
+	display: none;
+}
+
+#map_wrapper {
+    height: 400px;
+}
+
+#map_canvas {
+    height: 100%;
+}
+
+#forecast_container {
+	font-size: 10px;
+}

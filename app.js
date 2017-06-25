@@ -82,15 +82,18 @@ $('.js-spot').change(function() {
 $('.js-go').on('click', function(event) {
 	event.preventDefault();
 	$('#map').removeClass('hidden');
+	$('.js-surf').removeClass('hidden');
+	$('.js-beer').removeClass('hidden');
 	findForecast();
 	findBreweries();
 });
 
-
 //gets surf forecast from Spitcast API
 var findForecast = function() {
-	$.getJSON('http://api.spitcast.com/api/spot/forecast/' + SELECTED_SPOT.spot_id +'/', 
-		function(data) {
+	$.ajax({
+		url: 'https://cors-anywhere.herokuapp.com/' + 
+		'http://api.spitcast.com/api/spot/forecast/' + SELECTED_SPOT.spot_id +'/',
+		success: function(data) {
 			//stores desired info in forecast array
 			var forecast = data.map(function(item) {
 				return {
@@ -107,7 +110,10 @@ var findForecast = function() {
 			});
 			//puts HTML into DOM
 			$('#forecast_container').html(forecastHTML.join(''));
-		});
+		},
+		error: $('#forecast_container').html("<p>Sorry, we don't have any forcast info for this spot today!</p>")
+
+	});
 }
 
 //gets brewery information by location from the brewerydDB website using
@@ -116,21 +122,28 @@ var findBreweries = function() {
 	//resets BREWERY_INFO in case user changes their mind
 	BREWERY_INFO = [];
 	//had to use cors-anywhere proxy to get around CORS restriction
-	$.getJSON('https://cors-anywhere.herokuapp.com' + 
+	$.ajax({
+		url: 'https://cors-anywhere.herokuapp.com' + 
 		'/http://api.brewerydb.com/v2/search/geo/point?lat=' +
 		SELECTED_SPOT.latitude + '&lng=' + SELECTED_SPOT.longitude + 
-		'&radius=2' +
+		'&radius=5' +
 		'&key=' + BREWERY_API_KEY, 
-		function(data) {
+		success: function(data) {
 			//stores the data in BREWERY_INFO
-			BREWERY_INFO = data.data.map(function(item) {
-				return item;
-			});
-			//calls function that creates map
-			$('#map_canvas').removeClass('hidden');
-			initMap();
-		}
-	);
+			try{
+				BREWERY_INFO = data.data.map(function(item) {
+					return item;
+				});
+				//calls function that creates map
+				$('#map_canvas').removeClass('hidden');
+				initMap();
+			}
+			catch(e) {
+				$('#map_canvas').html("<p>Sorry, we didn't find any beer near here.</p>");
+				$('#map_canvas').removeClass('hidden');
+			}
+		},
+	});
 };
 
 //creates a map using Google Map API

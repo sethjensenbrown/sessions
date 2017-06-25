@@ -15,34 +15,36 @@
         <!-- Bootstrap theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     </head>
-    <body class="background mobile-background">
+    <body class="background">
         <div class="container">
             <!--title and tagline-->
             <div class="page-header">
-                <h1 class="header">Sessions</h1>
-                <h4>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; surf + beer.</h4>
+                <h1 class="header blur">Sessions       <small>&nbsp; &nbsp; surf + beer.</small></h1>
             </div>
         </div>
         <div class="container">
             <div class="row">
-                <!--selector for surf spots-->
-                <form class="form">
+                <!--searchbar for main title screen-->
+                <form class="blur">
                     <p><h4>Select your surf spot here:</h4></p>
-                    <select name="county" class="js-county selector"></select>
-                    <select name="spot" class="hidden js-spot selector"></select>
-                    <button type="submit" class="hidden js-go button">go.</button>
+                    <select name="county" class="js-county selector">
+                        <option value="value">Name</option>
+                    </select>
+                    <select name="spot" class="hidden js-spot selector">
+</select>
+                    <button type="submit" class="hidden js-go">go.</button>
                 </form>
             </div>
         </div>
         <div class="container">
-            <div class="row white-text">
+            <div class="row light-text blur">
                 <!--Forecast container-->
-                <div class="col-sm-4">
-                    <h3 class="js-surf hidden">first surf.</h3>
+                <div class="col-md-2">
+                    <h3>first surf.</h3>
                     <div id="forecast_container"></div>
                 </div>
-                <div class="col-sm-8">
-                    <h3 class="js-beer hidden">then beer.</h3>
+                <div class="col-md-10">
+                    <h3>then beer.</h3>
                     <!--Google Map container-->
                     <div id="map_wrapper">
                         <div id="map_canvas" class="mapping hidden"></div>
