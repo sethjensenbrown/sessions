@@ -6,9 +6,8 @@
     color: #ffffff;
 }
 
-#try-again:hover
+a
 {
-    color: #75bfa8;
 }
 
 #map_wrapper
@@ -123,10 +122,5 @@
     {
         font-size: 50px;
     }
-}
-
-.breweryDB
-{
-    height: 50px;
 }
 

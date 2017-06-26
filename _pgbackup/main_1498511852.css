@@ -6,11 +6,6 @@
     color: #ffffff;
 }
 
-#try-again:hover
-{
-    color: #75bfa8;
-}
-
 #map_wrapper
 {
     height: 400px;
@@ -50,11 +45,11 @@
     color: black;
 }
 
-.go-button
+.button
 {
     height: 30px;
     width: 50px;
-    color: #918e8e;
+    color: #000000;
     border-radius: 3px;
     background-color: #91edd1;
 }
@@ -71,7 +66,7 @@
     margin-bottom: 20px;
 }
 
-@media (max-width:767px)
+@media (max-width:479px)
 {
     .mobile-background
     {
@@ -84,21 +79,18 @@
         background-repeat: no-repeat;
         background-attachment: fixed;
     }
+    .background-small
+    {
+        background-image: url('news-170503-1-1-Sea-Shepherd-beer-1-1000h.jpg');
+        width: 100%;
+    }
     .small-results-title
-    {
-        font-size: 40px;
-    }
-    .small-header
-    {
-        font-size: 40px;
-    }
-    .small-subheader
     {
         font-size: 30px;
     }
 }
 
-@media (min-width:768px)
+@media (min-width:480px)
 {
     .background
     {
@@ -123,10 +115,5 @@
     {
         font-size: 50px;
     }
-}
-
-.breweryDB
-{
-    height: 50px;
 }
 

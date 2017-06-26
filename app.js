@@ -10,6 +10,7 @@ var RADIUS = 5;
 // gets the spot info from the SpitCast API and stores it into the SPOT_INFO array
 // also gets the county names from SPOT_INFO and stores them into the COUNTY_NAMES array
 //this list is used to generate the dropdown list in the main menu
+//had to use cors-anywhere proxy to get around CORS restriction
 $.getJSON('https://cors-anywhere.herokuapp.com/http://api.spitcast.com/api/spot/all', function(data) {
 	//copies spot data from SpitCast API into SPOT_INFO array
 	data.forEach(function(item) {
@@ -68,8 +69,9 @@ var getSpotNames = function(countyName) {
 //event listener for spot selection
 //stores the info from the selected spot in SELECTED_SPOT object
 $('.js-spot').change(function() {
-	//resets every time a new selection is made
+	//resets spot and radius every time a new selection is made
 	SELECTED_SPOT = {};
+	RADIUS = 5;
 	//makes submit button visible once spot is selected
 	$('.js-go').removeClass('hidden');
 	var spotName = $('.js-spot option:selected').text();
@@ -133,6 +135,7 @@ var findBreweries = function() {
 		'&key=' + BREWERY_API_KEY, 
 		success: function(data) {
 			//stores the data in BREWERY_INFO
+			//try-catch in case no breweries found in this radius
 			try{
 				BREWERY_INFO = data.data.map(function(item) {
 					return item;
@@ -144,8 +147,9 @@ var findBreweries = function() {
 			catch(e) {
 				$('#map_canvas').html("<p>Sorry, we didn't find any beer near here.</p>" +
 					"<p>Don't be salty, fancy beer is hard to find!</p>" +
-					"<a id='try-again' href='#'>Click here to try again with a bigger readius.</a>");
+					"<a id='try-again' class='light-blue' href='#'>Click here to try again with a bigger search radius.</a>");
 				$('#map_canvas').removeClass('hidden');
+				$('#results_container').html("<p>Sorry, we didn't find any beer near here.</p>");
 			}
 		},
 	});
@@ -201,9 +205,9 @@ function initMap() {
         '<p class="black-text">' + (item.streetAddress || '') + '</p>' +
         '<p class="black-text">' + (item.locality || '') + ', ' + (item.region || '') + ' ' + (item.postalCode || '') + '</p>' +
         '<p class="black-text">' + (item.phone || '') + '</p>' +
-        '<p><a href="' + (item.website || 'http://www.brewerydb.com/brewery/' + item.brewery.id) + 
-        '">' + (item.website || 'http://www.brewerydb.com/brewery/' + item.brewery.id) + '</a></p>' +
         '<p class="black-text">' + (item.hoursOfOperation || '') + '</p>' +
+        '<p><a id="try-again" class="light-blue" href="' + (item.website || 'http://www.brewerydb.com/brewery/' + item.brewery.id) + 
+        '">' + (item.website || 'http://www.brewerydb.com/brewery/' + item.brewery.id) + '</a></p>' +
     	'</div>']
     });
         
@@ -237,6 +241,6 @@ function initMap() {
     }
 
     //adds brewery info as a list below the map
-    $('#results_container').html(infoWindowContent.join(''));
+    $('#results_container').html(infoWindowContent.join('<hr>'));
     $('#results_container p,h3').removeClass('black-text');
 };

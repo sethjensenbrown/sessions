@@ -6,9 +6,9 @@
     color: #ffffff;
 }
 
-#try-again:hover
+.hidden
 {
-    color: #75bfa8;
+    display: none;
 }
 
 #map_wrapper
@@ -26,9 +26,19 @@
     font-size: 15px;
 }
 
-.hidden
+@media (min-width:480px)
 {
-    display: none;
+    .background
+    {
+        background-image: linear-gradient(
+	      rgba(0, 0, 0, 0.5),
+	      rgba(0, 0, 0, 0.5)
+	    ),
+	    url('jeremy-bishop-226288.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
 }
 
 .selector
@@ -50,28 +60,16 @@
     color: black;
 }
 
-.go-button
+.button
 {
     height: 30px;
     width: 50px;
-    color: #918e8e;
+    color: #000000;
     border-radius: 3px;
     background-color: #91edd1;
 }
 
-.light-blue
-{
-    color: #91edd1;
-}
-
-.form
-{
-    padding-left: 15px;
-    display: block;
-    margin-bottom: 20px;
-}
-
-@media (max-width:767px)
+@media (max-width:479px)
 {
     .mobile-background
     {
@@ -84,33 +82,26 @@
         background-repeat: no-repeat;
         background-attachment: fixed;
     }
-    .small-results-title
+    .background-small
     {
-        font-size: 40px;
-    }
-    .small-header
-    {
-        font-size: 40px;
-    }
-    .small-subheader
-    {
-        font-size: 30px;
+        background-image: url('news-170503-1-1-Sea-Shepherd-beer-1-1000h.jpg');
+        width: 100%;
     }
 }
 
-@media (min-width:768px)
+.form
 {
-    .background
-    {
-        background-image: linear-gradient(
-	      rgba(0, 0, 0, 0.5),
-	      rgba(0, 0, 0, 0.5)
-	    ),
-	    url('jeremy-bishop-226288.jpg');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-    }
+    padding-left: 15px;
+    display: block;
+}
+
+.light-blue
+{
+    color: #91edd1;
+}
+
+@media (min-width:480px)
+{
     .big-header
     {
         font-size: 100px;
@@ -125,8 +116,8 @@
     }
 }
 
-.breweryDB
+.small-results-title
 {
-    height: 50px;
+    font-size: 30px;
 }
 

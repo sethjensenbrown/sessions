@@ -19,8 +19,8 @@
         <div class="container">
             <!--title and tagline-->
             <div class="page-header">
-                <h1 class="big-header small-header">Sessions</h1>
-                <h4 class="light-blue big-subheader small-subheader">&nbsp; &nbsp; &nbsp; &nbsp;surf + beer.</h4>
+                <h1 class="big-headergg big-header">Sessions</h1>
+                <h4 class="light-blue big-subheader">&nbsp; &nbsp; &nbsp; &nbsp;surf + beer.</h4>
             </div>
         </div>
         <div class="container">
@@ -30,7 +30,7 @@
                     <p><h4>Select your surf spot here:</h4></p>
                     <select name="county" class="js-county selector"></select>
                     <select name="spot" class="hidden js-spot selector"></select>
-                    <button type="submit" class="hidden js-go go-button">Go</button>
+                    <button type="submit" class="hidden js-go button">Go</button>
                 </form>
             </div>
         </div>
@@ -38,7 +38,7 @@
             <div class="row">
                 <!--Google Map container-->
                 <div id="map_wrapper" class="col-sm-12">
-                    <div id="map_canvas" class="hidden"> 
+                    <div id="map_canvas" class="mapping hidden"> 
 </div>
                 </div>
             </div>
@@ -49,26 +49,20 @@
                         <h3 class="js-surf hidden light-blue big-results-title small-results-title">First surf.</h3>
                         <div id="forecast_container"></div>
                     </div>
-                    <!--Results container-->
                     <div class="col-sm-8">
                         <h3 class="js-beer hidden light-blue big-results-title small-results-title">Then beer.</h3>
+                        <!--Results container-->
                         <div id="results_container"></div>
                     </div>
                 </div>
             </div>
-        </div>
-        <footer class="text-center">
-            <img src=" http://s3.amazonaws.com/brewerydb/Powered-By-BreweryDB.png" class="breweryDB">
-            <p>Also powered by&nbsp;<a href="http://www.spitcast.com/" class="light-blue" id="try-again">Spitcast</a></p>
-            <p>Created 2017 by Seth Jensen Brown as a part of the Thinkful Web Development Bootcamp.</p>
-        </footer>
-        <!--links in script for jQuery-->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <!--link to app.js-->
-        <script src="app.js"></script>
-        <!--links in Google Maps API-->
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkXhOx9aHkfBE2HIP9JMUo3LHhMSE-Vlg&callback=initMap"></script>
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+            <!--links in script for jQuery-->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <!--link to app.js-->
+            <script src="app.js"></script>
+            <!--links in Google Maps API-->
+            <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkXhOx9aHkfBE2HIP9JMUo3LHhMSE-Vlg&callback=initMap"></script>
+            <!-- Latest compiled and minified JavaScript -->
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     </body>
 </html>

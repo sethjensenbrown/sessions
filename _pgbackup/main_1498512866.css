@@ -1,14 +1,7 @@
-
-
 *
 {
     box-sizing: border-box;
     color: #ffffff;
-}
-
-#try-again:hover
-{
-    color: #75bfa8;
 }
 
 #map_wrapper
@@ -50,11 +43,11 @@
     color: black;
 }
 
-.go-button
+button
 {
     height: 30px;
     width: 50px;
-    color: #918e8e;
+    color: #000000;
     border-radius: 3px;
     background-color: #91edd1;
 }
@@ -71,7 +64,7 @@
     margin-bottom: 20px;
 }
 
-@media (max-width:767px)
+@media (max-width:479px)
 {
     .mobile-background
     {
@@ -88,17 +81,9 @@
     {
         font-size: 40px;
     }
-    .small-header
-    {
-        font-size: 40px;
-    }
-    .small-subheader
-    {
-        font-size: 30px;
-    }
 }
 
-@media (min-width:768px)
+@media (min-width:480px)
 {
     .background
     {
@@ -123,10 +108,5 @@
     {
         font-size: 50px;
     }
-}
-
-.breweryDB
-{
-    height: 50px;
 }
 
