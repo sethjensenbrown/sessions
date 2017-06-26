@@ -5,6 +5,7 @@ var COUNTY_NAMES = ['-select county-'];
 var SPOT_NAMES = ['-select spot-']; 
 var SELECTED_SPOT = {latitude: 0, longitude:0};
 var BREWERY_INFO = [];
+var RADIUS = 5;
 
 // gets the spot info from the SpitCast API and stores it into the SPOT_INFO array
 // also gets the county names from SPOT_INFO and stores them into the COUNTY_NAMES array
@@ -128,9 +129,8 @@ var findBreweries = function() {
 		url: 'https://cors-anywhere.herokuapp.com' + 
 		'/http://api.brewerydb.com/v2/search/geo/point?lat=' +
 		SELECTED_SPOT.latitude + '&lng=' + SELECTED_SPOT.longitude + 
-		'&radius=5' +
+		'&radius=' + RADIUS +
 		'&key=' + BREWERY_API_KEY, 
-		complete: function() {console.log(this.url)},
 		success: function(data) {
 			//stores the data in BREWERY_INFO
 			try{
@@ -142,12 +142,21 @@ var findBreweries = function() {
 				initMap();
 			}
 			catch(e) {
-				$('#map_canvas').html("<p>Sorry, we didn't find any beer near here.</p>");
+				$('#map_canvas').html("<p>Sorry, we didn't find any beer near here.</p>" +
+					"<p>Don't be salty, fancy beer is hard to find!</p>" +
+					"<a id='try-again' href='#'>Click here to try again with a bigger readius.</a>");
 				$('#map_canvas').removeClass('hidden');
 			}
 		},
 	});
 };
+
+//retries AJAX request with bigger search radius
+$('#map_canvas').on('click', '#try-again', function(event) {
+	RADIUS += 5;
+	console.log('radius is now: ' + RADIUS);
+	findBreweries();
+});
 
 //creates a map using Google Map API
 function initMap() {
@@ -174,7 +183,7 @@ function initMap() {
     	icon: surfIcon
   	});
   	var spotInfoWindow = new google.maps.InfoWindow({
-  		content: '<p>' + SELECTED_SPOT.spot_name + '<p>'
+  		content: '<p class="black-text">' + SELECTED_SPOT.spot_name + '<p>'
   	});
   	beachMarker.addListener('click', function() {
     	spotInfoWindow.open(map, beachMarker);
@@ -188,13 +197,13 @@ function initMap() {
     //creates html for info windows for map markers
     var infoWindowContent = BREWERY_INFO.map(function(item) {
     	return ['<div class="info_content">' +
-        '<h3>' + (item.brewery.name || '') + '</h3>' +
-        '<p>' + (item.streetAddress || '') + '</p>' +
-        '<p>' + (item.locality || '') + ', ' + (item.region || '') + ' ' + (item.postalCode || '') + '</p>' +
-        '<p>' + (item.phone || '') + '</p>' +
+        '<h3 class="black-text">' + (item.brewery.name || '') + '</h3>' +
+        '<p class="black-text">' + (item.streetAddress || '') + '</p>' +
+        '<p class="black-text">' + (item.locality || '') + ', ' + (item.region || '') + ' ' + (item.postalCode || '') + '</p>' +
+        '<p class="black-text">' + (item.phone || '') + '</p>' +
         '<p><a href="' + (item.website || 'http://www.brewerydb.com/brewery/' + item.brewery.id) + 
         '">' + (item.website || 'http://www.brewerydb.com/brewery/' + item.brewery.id) + '</a></p>' +
-        '<p>' + (item.hoursOfOperation || '') + '</p>' +
+        '<p class="black-text">' + (item.hoursOfOperation || '') + '</p>' +
     	'</div>']
     });
         
@@ -229,4 +238,5 @@ function initMap() {
 
     //adds brewery info as a list below the map
     $('#results_container').html(infoWindowContent.join(''));
+    $('#results_container p,h3').removeClass('black-text');
 };
