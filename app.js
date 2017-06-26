@@ -9,7 +9,7 @@ var BREWERY_INFO = [];
 // gets the spot info from the SpitCast API and stores it into the SPOT_INFO array
 // also gets the county names from SPOT_INFO and stores them into the COUNTY_NAMES array
 //this list is used to generate the dropdown list in the main menu
-$.getJSON('http://api.spitcast.com/api/spot/all', function(data) {
+$.getJSON('https://cors-anywhere.herokuapp.com/http://api.spitcast.com/api/spot/all', function(data) {
 	//copies spot data from SpitCast API into SPOT_INFO array
 	data.forEach(function(item) {
 		SPOT_INFO.push(item);
@@ -91,6 +91,7 @@ $('.js-go').on('click', function(event) {
 //gets surf forecast from Spitcast API
 var findForecast = function() {
 	$.ajax({
+		//had to use cors-anywhere proxy to get around CORS restriction
 		url: 'https://cors-anywhere.herokuapp.com/' + 
 		'http://api.spitcast.com/api/spot/forecast/' + SELECTED_SPOT.spot_id +'/',
 		success: function(data) {
@@ -111,6 +112,7 @@ var findForecast = function() {
 			//puts HTML into DOM
 			$('#forecast_container').html(forecastHTML.join(''));
 		},
+		//if no forcast info found, adds message to page
 		error: $('#forecast_container').html("<p>Sorry, we don't have any forcast info for this spot today!</p>")
 
 	});
@@ -128,6 +130,7 @@ var findBreweries = function() {
 		SELECTED_SPOT.latitude + '&lng=' + SELECTED_SPOT.longitude + 
 		'&radius=5' +
 		'&key=' + BREWERY_API_KEY, 
+		complete: function() {console.log(this.url)},
 		success: function(data) {
 			//stores the data in BREWERY_INFO
 			try{
@@ -227,8 +230,3 @@ function initMap() {
     //adds brewery info as a list below the map
     $('#results_container').html(infoWindowContent.join(''));
 };
-
-//NEXT TASKS: 
-//create backup if no breweries found, possibly change radius?
-//create backup if no forecast found
-//design!
