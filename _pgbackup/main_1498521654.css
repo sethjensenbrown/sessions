@@ -93,18 +93,13 @@
     {
         font-family: Work Sans;
         font-weight: 900;
-        font-size: 47px;
+        font-size: 40px;
     }
     .small-subheader
     {
         font-family: Work Sans;
         font-weight: 100;
-        font-size: 26px;
-    }
-    #nospace
-    {
-        line-height: 21px;
-        letter-spacing: 10px;
+        font-size: 30px;
     }
 }
 
@@ -123,8 +118,8 @@
     }
     .big-header
     {
-        font-family: Work Sans;
-        font-weight: 900;
+    	font-family: Work Sans;
+    	font-weight: 900;
         font-size: 100px;
     }
     .big-subheader
@@ -137,24 +132,10 @@
     {
         font-size: 50px;
     }
-    #nospace
-    {
-        margin-bottom: 0px;
-        margin-top: 0px;
-        padding-top: 0px;
-        padding-bottom: 0px;
-        line-height: 68px;
-        letter-spacing: 22px;
-    }
 }
 
 .breweryDB
 {
     height: 50px;
-}
-
-footer
-{
-    margin-top: 50px;
 }
 
