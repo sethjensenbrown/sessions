@@ -5,7 +5,7 @@ var COUNTY_NAMES = ['-select county-'];
 var SPOT_NAMES = ['-select spot-']; 
 var SELECTED_SPOT = {latitude: 0, longitude:0};
 var BREWERY_INFO = [];
-var RADIUS = 5;
+var RADIUS = 3;
 
 // gets the spot info from the SpitCast API and stores it into the SPOT_INFO array
 // also gets the county names from SPOT_INFO and stores them into the COUNTY_NAMES array
@@ -71,7 +71,7 @@ var getSpotNames = function(countyName) {
 $('.js-spot').change(function() {
 	//resets spot and radius every time a new selection is made
 	SELECTED_SPOT = {};
-	RADIUS = 5;
+	RADIUS = 3;
 	//makes submit button visible once spot is selected
 	$('.js-go').removeClass('hidden');
 	var spotName = $('.js-spot option:selected').text();
