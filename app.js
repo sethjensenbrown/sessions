@@ -187,7 +187,7 @@ function initMap() {
     	icon: surfIcon
   	});
   	var spotInfoWindow = new google.maps.InfoWindow({
-  		content: '<p class="black-text">' + SELECTED_SPOT.spot_name + '<p>'
+  		content: '<h3 class="black-text">' + SELECTED_SPOT.spot_name + '<h3>'
   	});
   	beachMarker.addListener('click', function() {
     	spotInfoWindow.open(map, beachMarker);
